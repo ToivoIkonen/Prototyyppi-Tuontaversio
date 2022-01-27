@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Wallnode.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Sprite-0001.png" type="Texture" id=2]
 [ext_resource path="res://Player.gd" type="Script" id=3]
 [ext_resource path="res://NicePng_black-splash-png_583293.png" type="Texture" id=4]
+[ext_resource path="res://boss12.wav" type="AudioStream" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -14,14 +15,19 @@ extents = Vector2( 8.5, 8.5 )
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 8, 136 )
 
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 320, 10 )
+
 [node name="World" type="Node2D"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 follow_viewport_enable = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = -24.0
+margin_top = -136.0
+margin_right = 24.0
+margin_bottom = -96.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -35,6 +41,7 @@ script = ExtResource( 3 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="PlayerNode/Player"]
+position = Vector2( 2.38419e-07, -2.38419e-07 )
 texture = ExtResource( 2 )
 
 [node name="Detect" type="Area2D" parent="PlayerNode/Player"]
@@ -73,11 +80,22 @@ zoom = Vector2( 0.5, 0.5 )
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 0.0627451, 0.0901961, 0.152941, 1 )
-position = Vector2( 0, 1.52588e-05 )
 scale = Vector2( 200, 200 )
 z_index = -5
 texture = ExtResource( 2 )
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = 4.816
+autoplay = true
+
+[node name="Boss" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boss"]
+position = Vector2( 0, 376 )
+shape = SubResource( 4 )
+
 [connection signal="area_entered" from="PlayerNode/Player/Detect" to="PlayerNode/Player" method="_on_Detect_area_entered"]
 [connection signal="body_entered" from="PlayerNode/Player/Detect" to="PlayerNode/Player" method="_on_Detect_body_entered"]
 [connection signal="body_entered" from="PlayerNode/Player/Resetter" to="PlayerNode/Player" method="_on_Resetter_body_entered"]
+[connection signal="body_entered" from="Boss" to="PlayerNode/Player" method="_on_Boss_body_entered"]
